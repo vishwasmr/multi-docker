@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker 
+
+before_install:
+  - docker build -t vimr/react-test -f ./client/Dockerfile.dev ./client
+
+scripts:
+  - docker run vimr/react-test nmp test -- --coverage
+
+after_success:
+  - docker build -t vimr/multi-client ./client
+  - docker build -t vimr/multi-nginx ./nginx
+  - docker build -t vimr/multi-server ./server
+  - docker build -t vimr/multi-worker ./worker
+  # Login to Docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "Docker_ID" --password-stdin
+  # Take the images and push them to Docker Hub
+  - docker push vimr/multi-client
+  - docker push vimr/multi-nginx
+  - docker push vimr/multi-server
+  - docker push vimr/multi-worker
