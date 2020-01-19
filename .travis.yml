@@ -13,7 +13,7 @@ after_success:
   - docker build -t vimr/multi-server ./server
   - docker build -t vimr/multi-worker ./worker
   # Login to Docker CLI
-  - echo "$DOCKER_PASSWORD" | docker login -u "Docker_ID" --password-stdin
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take the images and push them to Docker Hub
   - docker push vimr/multi-client
   - docker push vimr/multi-nginx
